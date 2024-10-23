@@ -43,6 +43,8 @@ const Page = () => {
     deposit: "",
   });
 
+  // todo refactor the form data logic? for cleaner code
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -92,6 +94,17 @@ const Page = () => {
       ...prevData,
       remarks: value,
     }));
+  }
+
+  function handleTax(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      taxes: value,
+    }));
+
+    console.log(value);
   }
 
   return (
@@ -164,6 +177,47 @@ const Page = () => {
           onChange={handleRemarks}
         ></textarea>
       </div>
+
+      {/* todo handle data
+      <div>
+        {["cash", "card", "weekly", "monthly", "will-call", "mail"].map(
+          (name) => (
+            <div key={name}>
+              <input type="checkbox" id="checkbox" />
+              <label htmlFor="checkbox">
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </label>
+            </div>
+          ),
+        )}
+      </div>
+      */}
+
+      <div>
+        <label htmlFor="default_tax">0%</label>
+        <input
+          type="radio"
+          name="taxes"
+          id="default_tax"
+          value="0"
+          checked={formData.taxes === "0"}
+          onChange={handleTax}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="local_tax">8.9%</label>
+        <input
+          type="radio"
+          name="taxes"
+          id="local_tax"
+          value="8.9"
+          checked={formData.taxes === "8.9"}
+          onChange={handleTax}
+        />
+      </div>
+
+      {/*todo purchase or deposit logic*/}
 
       <button type="submit">Submit</button>
     </form>
