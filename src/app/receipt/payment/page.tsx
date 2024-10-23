@@ -20,8 +20,6 @@ function getFutureDate() {
   return `${year}-${month}-${day}T10:00`;
 }
 
-console.log(getFutureDate());
-
 const Page = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -38,7 +36,7 @@ const Page = () => {
     willCall: false,
     mail: false,
     taxes: "0",
-    typeOfPurchase: "",
+    typeOfPurchase: "purchase",
     payment: "",
     deposit: "",
   });
@@ -96,6 +94,15 @@ const Page = () => {
     }));
   }
 
+  function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, checked } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: checked,
+    }));
+  }
+
   function handleTax(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
 
@@ -103,8 +110,33 @@ const Page = () => {
       ...prevData,
       taxes: value,
     }));
+  }
 
-    console.log(value);
+  function handlePurchaseType(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      typeOfPurchase: value,
+    }));
+  }
+
+  function handlePayment(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      payment: value,
+    }));
+  }
+
+  function handleDeposit(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      deposit: value,
+    }));
   }
 
   return (
@@ -178,12 +210,16 @@ const Page = () => {
         ></textarea>
       </div>
 
-      {/* todo handle data
       <div>
         {["cash", "card", "weekly", "monthly", "will-call", "mail"].map(
           (name) => (
             <div key={name}>
-              <input type="checkbox" id="checkbox" />
+              <input
+                type="checkbox"
+                id="checkbox"
+                name={name}
+                onChange={handleCheckbox}
+              />
               <label htmlFor="checkbox">
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </label>
@@ -191,10 +227,8 @@ const Page = () => {
           ),
         )}
       </div>
-      */}
 
       <div>
-        <label htmlFor="default_tax">0%</label>
         <input
           type="radio"
           name="taxes"
@@ -203,10 +237,10 @@ const Page = () => {
           checked={formData.taxes === "0"}
           onChange={handleTax}
         />
+        <label htmlFor="default_tax">0%</label>
       </div>
 
       <div>
-        <label htmlFor="local_tax">8.9%</label>
         <input
           type="radio"
           name="taxes"
@@ -215,9 +249,57 @@ const Page = () => {
           checked={formData.taxes === "8.9"}
           onChange={handleTax}
         />
+        <label htmlFor="local_tax">8.9%</label>
       </div>
 
       {/*todo purchase or deposit logic*/}
+      <div>
+        <input
+          type="radio"
+          name="typeOfPurchase"
+          id="purchase"
+          value="purchase"
+          checked={formData.typeOfPurchase === "purchase"}
+          onChange={handlePurchaseType}
+        />
+        <label htmlFor="purchase">Purchase</label>
+      </div>
+
+      <div>
+        <input
+          type="radio"
+          name="typeOfPurchase"
+          id="lay_away"
+          value="lay_away"
+          checked={formData.typeOfPurchase === "lay_away"}
+          onChange={handlePurchaseType}
+        />
+        <label htmlFor="lay_away">Lay away</label>
+      </div>
+
+      <hr />
+
+      {formData.typeOfPurchase === "purchase" ? (
+        <div>
+          <label htmlFor="payment">Payment</label>
+          <input
+            type="text"
+            name="payment"
+            id="payment"
+            onChange={handlePayment}
+          />
+        </div>
+      ) : (
+        <div>
+          <label htmlFor="deposit">Deposit</label>
+          <input
+            type="text"
+            name="deposit"
+            id="deposit"
+            onChange={handleDeposit}
+          />
+        </div>
+      )}
 
       <button type="submit">Submit</button>
     </form>
