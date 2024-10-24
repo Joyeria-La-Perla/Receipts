@@ -118,6 +118,8 @@ const Page = () => {
     setFormData((prevData) => ({
       ...prevData,
       typeOfPurchase: value,
+      payment: value === "purchase" ? prevData.payment : "",
+      deposit: value === "lay_away" ? prevData.deposit : "",
     }));
   }
 
@@ -252,7 +254,6 @@ const Page = () => {
         <label htmlFor="local_tax">8.9%</label>
       </div>
 
-      {/*todo purchase or deposit logic*/}
       <div>
         <input
           type="radio"
@@ -286,6 +287,7 @@ const Page = () => {
             type="text"
             name="payment"
             id="payment"
+            value={formData.payment}
             onChange={handlePayment}
           />
         </div>
@@ -296,6 +298,7 @@ const Page = () => {
             type="text"
             name="deposit"
             id="deposit"
+            value={formData.deposit}
             onChange={handleDeposit}
           />
         </div>
