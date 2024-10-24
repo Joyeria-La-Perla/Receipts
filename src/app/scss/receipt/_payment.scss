@@ -7,3 +7,14 @@
   border: 1px solid black;
   border-radius: 4px;
 }
+
+.small-receipt-form__taxes-container, .small-receipt-form__checkbox-container, .small-receipt-form__purchase-container {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+
+  input {
+    transform: scale(2);
+    margin: 15px;
+  }
+}
