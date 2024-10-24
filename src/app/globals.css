@@ -2,26 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.small-receipt-form div:has(> label, > input):not(.small-receipt-form__checkbox-container):not(.small-receipt-form__taxes-container):not(.small-receipt-form__purchase-container) {
+    display: flex;
+    flex-direction: column;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.small-receipt-form div input, fieldset, textarea {
+    border: 1px solid black;
+    border-radius: 4px;
 }
