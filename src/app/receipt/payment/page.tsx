@@ -79,7 +79,15 @@ const Page = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    // todo goal: make it look like physical receipt
+    <form
+      onSubmit={handleSubmit}
+      className="small-receipt-form max-w-screen-sm mx-auto"
+    >
+      <h1 className="text-4xl font-black">
+        No. <span className="text-sm font-normal">0001</span>
+      </h1>
+
       <div>
         <label htmlFor="name">Name</label>
         <input
@@ -127,7 +135,7 @@ const Page = () => {
         />
       </div>
 
-      <div>
+      <div className="flex justify-between">
         <div>
           <label htmlFor="received">Date Received</label>
           <input
@@ -151,21 +159,22 @@ const Page = () => {
         </div>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <label htmlFor="remarks">Remarks</label>
         <textarea
           name="remarks"
           id="remarks"
-          cols={30}
-          rows={10}
+          cols={5000}
+          rows={4}
           onChange={handleChange}
+          className="border border-black resize-none max-h-28"
         ></textarea>
       </div>
 
-      <div>
+      <div className="grid grid-cols-3">
         {["cash", "card", "weekly", "monthly", "will-call", "mail"].map(
           (name) => (
-            <div key={name}>
+            <div key={name} className="small-receipt-form__checkbox-container">
               <input
                 type="checkbox"
                 id={name}
@@ -180,53 +189,61 @@ const Page = () => {
         )}
       </div>
 
-      <div>
-        <input
-          type="radio"
-          name="taxes"
-          id="default_tax"
-          value="0"
-          checked={formData.taxes === "0"}
-          onChange={handleChange}
-        />
-        <label htmlFor="default_tax">0%</label>
-      </div>
+      {/*todo add charges ._.*/}
 
-      <div>
-        <input
-          type="radio"
-          name="taxes"
-          id="local_tax"
-          value="8.9"
-          checked={formData.taxes === "8.9"}
-          onChange={handleChange}
-        />
-        <label htmlFor="local_tax">8.9%</label>
-      </div>
+      <fieldset className="border border-black">
+        <legend>Taxes</legend>
+        <div className="small-receipt-form__taxes-container">
+          <input
+            type="radio"
+            name="taxes"
+            id="default_tax"
+            value="0"
+            checked={formData.taxes === "0"}
+            onChange={handleChange}
+          />
+          <label htmlFor="default_tax">0%</label>
+        </div>
 
-      <div>
-        <input
-          type="radio"
-          name="typeOfPurchase"
-          id="purchase"
-          value="purchase"
-          checked={formData.typeOfPurchase === "purchase"}
-          onChange={handlePurchaseType}
-        />
-        <label htmlFor="purchase">Purchase</label>
-      </div>
+        <div className="small-receipt-form__taxes-container">
+          <input
+            type="radio"
+            name="taxes"
+            id="local_tax"
+            value="8.9"
+            checked={formData.taxes === "8.9"}
+            onChange={handleChange}
+          />
+          <label htmlFor="local_tax">8.9%</label>
+        </div>
+      </fieldset>
 
-      <div>
-        <input
-          type="radio"
-          name="typeOfPurchase"
-          id="lay_away"
-          value="lay_away"
-          checked={formData.typeOfPurchase === "lay_away"}
-          onChange={handlePurchaseType}
-        />
-        <label htmlFor="lay_away">Lay away</label>
-      </div>
+      <fieldset className="border border-black">
+        <legend>Type of purchase</legend>
+        <div className="small-receipt-form__purchase-container">
+          <input
+            type="radio"
+            name="typeOfPurchase"
+            id="purchase"
+            value="purchase"
+            checked={formData.typeOfPurchase === "purchase"}
+            onChange={handlePurchaseType}
+          />
+          <label htmlFor="purchase">Purchase</label>
+        </div>
+
+        <div className="small-receipt-form__purchase-container">
+          <input
+            type="radio"
+            name="typeOfPurchase"
+            id="lay_away"
+            value="lay_away"
+            checked={formData.typeOfPurchase === "lay_away"}
+            onChange={handlePurchaseType}
+          />
+          <label htmlFor="lay_away">Lay away</label>
+        </div>
+      </fieldset>
 
       <hr />
 
