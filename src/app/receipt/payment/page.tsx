@@ -41,57 +41,21 @@ const Page = () => {
     deposit: "",
   });
 
-  // todo refactor the form data logic? for cleaner code
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    const { value, name } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     console.log(formData);
-  }
-
-  function handleName(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      name: value,
-    }));
-  }
-
-  function handleReceived(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      dateReceived: value,
-    }));
-  }
-
-  function handlePromised(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      datePromised: value,
-    }));
-  }
-
-  function handlePhone(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      phone: value,
-    }));
-  }
-
-  function handleRemarks(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      remarks: value,
-    }));
   }
 
   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
@@ -100,15 +64,6 @@ const Page = () => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: checked,
-    }));
-  }
-
-  function handleTax(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      taxes: value,
     }));
   }
 
@@ -123,24 +78,6 @@ const Page = () => {
     }));
   }
 
-  function handlePayment(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      payment: value,
-    }));
-  }
-
-  function handleDeposit(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      deposit: value,
-    }));
-  }
-
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -149,7 +86,7 @@ const Page = () => {
           type="text"
           name="name"
           id="name"
-          onChange={handleName}
+          onChange={handleChange}
           autoComplete="off"
         />
       </div>
@@ -185,7 +122,7 @@ const Page = () => {
           type="text"
           name="phone"
           id="phone"
-          onChange={handlePhone}
+          onChange={handleChange}
           autoComplete="off"
         />
       </div>
@@ -198,7 +135,7 @@ const Page = () => {
             name="received"
             id="received"
             value={formData.dateReceived}
-            onChange={handleReceived}
+            onChange={handleChange}
           />
         </div>
 
@@ -209,7 +146,7 @@ const Page = () => {
             name="promised"
             id="promised"
             value={formData.datePromised}
-            onChange={handlePromised}
+            onChange={handleChange}
           />
         </div>
       </div>
@@ -221,7 +158,7 @@ const Page = () => {
           id="remarks"
           cols={30}
           rows={10}
-          onChange={handleRemarks}
+          onChange={handleChange}
         ></textarea>
       </div>
 
@@ -250,7 +187,7 @@ const Page = () => {
           id="default_tax"
           value="0"
           checked={formData.taxes === "0"}
-          onChange={handleTax}
+          onChange={handleChange}
         />
         <label htmlFor="default_tax">0%</label>
       </div>
@@ -262,7 +199,7 @@ const Page = () => {
           id="local_tax"
           value="8.9"
           checked={formData.taxes === "8.9"}
-          onChange={handleTax}
+          onChange={handleChange}
         />
         <label htmlFor="local_tax">8.9%</label>
       </div>
@@ -301,7 +238,7 @@ const Page = () => {
             name="payment"
             id="payment"
             value={formData.payment}
-            onChange={handlePayment}
+            onChange={handleChange}
           />
         </div>
       ) : (
@@ -312,7 +249,7 @@ const Page = () => {
             name="deposit"
             id="deposit"
             value={formData.deposit}
-            onChange={handleDeposit}
+            onChange={handleChange}
           />
         </div>
       )}
