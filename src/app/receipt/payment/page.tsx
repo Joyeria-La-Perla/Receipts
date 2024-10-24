@@ -145,7 +145,13 @@ const Page = () => {
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="name">Name</label>
-        <input type="text" name="name" id="name" onChange={handleName} />
+        <input
+          type="text"
+          name="name"
+          id="name"
+          onChange={handleName}
+          autoComplete="off"
+        />
       </div>
 
       <div>
@@ -155,6 +161,7 @@ const Page = () => {
           name="address"
           id="address"
           value={formData.address}
+          autoComplete="off"
           readOnly
           disabled
         />
@@ -174,7 +181,13 @@ const Page = () => {
 
       <div>
         <label htmlFor="phone">Phone</label>
-        <input type="text" name="phone" id="phone" onChange={handlePhone} />
+        <input
+          type="text"
+          name="phone"
+          id="phone"
+          onChange={handlePhone}
+          autoComplete="off"
+        />
       </div>
 
       <div>
@@ -218,11 +231,11 @@ const Page = () => {
             <div key={name}>
               <input
                 type="checkbox"
-                id="checkbox"
+                id={name}
                 name={name}
                 onChange={handleCheckbox}
               />
-              <label htmlFor="checkbox">
+              <label htmlFor={name}>
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </label>
             </div>
