@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Form from "next/form";
 
 function getCurrentDate() {
   const date = new Date();
@@ -80,7 +81,9 @@ const Page = () => {
 
   return (
     // todo goal: make it look like physical receipt
-    <form
+    // todo add server action
+    <Form
+      action=""
       onSubmit={handleSubmit}
       className="small-receipt-form max-w-screen-sm mx-auto"
     >
@@ -272,7 +275,7 @@ const Page = () => {
       )}
 
       <button type="submit">Submit</button>
-    </form>
+    </Form>
   );
 };
 
