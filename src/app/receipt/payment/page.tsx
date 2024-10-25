@@ -42,6 +42,18 @@ const Page = () => {
     deposit: "",
   });
 
+  const [tableData, setTableData] = useState<string[]>([]);
+
+  function addItem(selectedItem: string) {
+    setTableData((prevData) => [...prevData, selectedItem]);
+  }
+
+  function removeItem(selectedItem: string) {
+    setTableData((prevData) =>
+      prevData.filter((item) => item !== selectedItem),
+    );
+  }
+
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
@@ -66,6 +78,15 @@ const Page = () => {
       ...prevData,
       [name]: checked,
     }));
+
+    // todo add the logic for table
+    console.log(name, checked);
+
+    if (checked) {
+      addItem(name);
+    } else {
+      removeItem(name);
+    }
   }
 
   function handlePurchaseType(e: React.ChangeEvent<HTMLInputElement>) {
@@ -193,6 +214,38 @@ const Page = () => {
       </div>
 
       {/*todo add charges ._.*/}
+      {/*todo tr will display when checking a checkbox above*/}
+      {/*todo total will get the text input and add it together*/}
+      <table className="small-receipt-form__table container">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tableData.map((data) => (
+            <tr key={data}>
+              <th scope="row">
+                {data.charAt(0).toUpperCase() + data.slice(1)}
+              </th>
+              <td>
+                <input
+                  type="text"
+                  name={`${data}_input`}
+                  id={`${data}_input`}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Total</th>
+            <td>33</td>
+          </tr>
+        </tfoot>
+      </table>
 
       <fieldset className="border border-black">
         <legend>Taxes</legend>
