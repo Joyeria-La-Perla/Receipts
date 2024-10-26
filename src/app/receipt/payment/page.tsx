@@ -3,6 +3,35 @@
 import React, { useState } from "react";
 import Form from "next/form";
 
+interface FormData {
+  name: string;
+  address: string;
+  city: string;
+  phone: string;
+  dateReceived: string;
+  datePromised: string;
+  remarks: string;
+  cash: boolean;
+  card: boolean;
+  weekly: boolean;
+  monthly: boolean;
+  willCall: boolean;
+  mail: boolean;
+  cashPrice: number;
+  cardPrice: number;
+  weeklyPrice: number;
+  monthlyPrice: number;
+  willCallPrice: number;
+  mailPrice: number;
+  totalPrice: number;
+  taxes: string;
+  typeOfPurchase: string;
+  payment: string;
+  deposit: string;
+
+  [key: string]: string | number | boolean;
+}
+
 function getCurrentDate() {
   const date = new Date();
   const year = date.getFullYear();
@@ -22,7 +51,7 @@ function getFutureDate() {
 }
 
 const Page = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     address: "1608 W Sylvester St Unit C",
     city: "Pasco",
@@ -36,6 +65,13 @@ const Page = () => {
     monthly: false,
     willCall: false,
     mail: false,
+    cashPrice: 0,
+    cardPrice: 0,
+    weeklyPrice: 0,
+    monthlyPrice: 0,
+    willCallPrice: 0,
+    mailPrice: 0,
+    totalPrice: 0,
     taxes: "0",
     typeOfPurchase: "purchase",
     payment: "",
@@ -59,10 +95,25 @@ const Page = () => {
   ) {
     const { value, name } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: name.endsWith("Price") ? Number(value) : value,
+      };
+
+      if (name.endsWith("Price")) {
+        updatedData.totalPrice =
+          updatedData.cashPrice +
+          updatedData.cardPrice +
+          updatedData.mailPrice +
+          updatedData.weeklyPrice +
+          updatedData.monthlyPrice +
+          updatedData.willCallPrice;
+      }
+      return updatedData;
+    });
+
+    console.log(value, name);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -196,7 +247,7 @@ const Page = () => {
       </div>
 
       <div className="grid grid-cols-3">
-        {["cash", "card", "weekly", "monthly", "will-call", "mail"].map(
+        {["cash", "card", "weekly", "monthly", "willCall", "mail"].map(
           (name) => (
             <div key={name} className="small-receipt-form__checkbox-container">
               <input
@@ -231,9 +282,11 @@ const Page = () => {
               </th>
               <td>
                 <input
-                  type="text"
-                  name={`${data}_input`}
-                  id={`${data}_input`}
+                  type="number"
+                  name={`${data}Price`}
+                  id={`${data}Price`}
+                  value={Number(formData[data + "Price"])}
+                  onChange={handleChange}
                 />
               </td>
             </tr>
@@ -242,7 +295,7 @@ const Page = () => {
         <tfoot>
           <tr>
             <th scope="row">Total</th>
-            <td>33</td>
+            <td>{formData.totalPrice}</td>
           </tr>
         </tfoot>
       </table>
