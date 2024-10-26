@@ -25,12 +25,13 @@ interface FormData {
   mailPrice: number;
   totalPrice: number;
   total: number;
+  purchaseDates: string[];
   taxes: string;
   typeOfPurchase: string;
   payment: string;
   deposit: string;
 
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | string[];
 }
 
 function getCurrentDate() {
@@ -74,6 +75,7 @@ const Page = () => {
     mailPrice: 0,
     totalPrice: 0,
     total: 0,
+    purchaseDates: [""],
     taxes: "0",
     typeOfPurchase: "purchase",
     payment: "",
@@ -286,6 +288,7 @@ const Page = () => {
         <thead>
           <tr>
             <th scope="col"></th>
+            <th scope="col">Date</th>
             <th scope="col">Price</th>
           </tr>
         </thead>
@@ -295,6 +298,7 @@ const Page = () => {
               <th scope="row">
                 {data.charAt(0).toUpperCase() + data.slice(1)}
               </th>
+              <td></td>
               <td>
                 <input
                   type="number"
@@ -310,6 +314,7 @@ const Page = () => {
         <tfoot>
           <tr>
             <th scope="row">Total</th>
+            <td className="text-center">{getCurrentDate()}</td>
             <td>
               {formData.total} - {formData.totalPrice} ={" "}
               {formData.total - formData.totalPrice}
