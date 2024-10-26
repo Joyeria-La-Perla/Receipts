@@ -125,10 +125,20 @@ const Page = () => {
   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, checked } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: checked,
-    }));
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: checked,
+      };
+
+      if (checked) {
+        updatedData.totalPrice += Number(updatedData[name + "Price"]);
+      } else {
+        updatedData.totalPrice -= Number(updatedData[name + "Price"]);
+      }
+
+      return updatedData;
+    });
 
     // todo add the logic for table
     console.log(name, checked);
