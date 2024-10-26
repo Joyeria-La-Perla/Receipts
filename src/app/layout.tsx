@@ -1,4 +1,4 @@
-import "./globals.css";
+import "./globals.scss";
 import Header from "@/app/components/Header";
 
 export default function RootLayout({
@@ -8,7 +8,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="px-4">
         <header>
           <Header />
         </header>

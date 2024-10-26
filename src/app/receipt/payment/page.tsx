@@ -1,6 +1,38 @@
 "use client";
 
 import React, { useState } from "react";
+import Form from "next/form";
+
+interface FormData {
+  name: string;
+  address: string;
+  city: string;
+  phone: string;
+  dateReceived: string;
+  datePromised: string;
+  remarks: string;
+  cash: boolean;
+  card: boolean;
+  weekly: boolean;
+  monthly: boolean;
+  willCall: boolean;
+  mail: boolean;
+  cashPrice: number;
+  cardPrice: number;
+  weeklyPrice: number;
+  monthlyPrice: number;
+  willCallPrice: number;
+  mailPrice: number;
+  totalPrice: number;
+  total: number;
+  purchaseDates: string[];
+  taxes: string;
+  typeOfPurchase: string;
+  payment: string;
+  deposit: string;
+
+  [key: string]: string | number | boolean | string[];
+}
 
 function getCurrentDate() {
   const date = new Date();
@@ -21,7 +53,7 @@ function getFutureDate() {
 }
 
 const Page = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     address: "1608 W Sylvester St Unit C",
     city: "Pasco",
@@ -35,25 +67,67 @@ const Page = () => {
     monthly: false,
     willCall: false,
     mail: false,
+    cashPrice: 0,
+    cardPrice: 0,
+    weeklyPrice: 0,
+    monthlyPrice: 0,
+    willCallPrice: 0,
+    mailPrice: 0,
+    totalPrice: 0,
+    total: 0,
+    purchaseDates: [],
     taxes: "0",
     typeOfPurchase: "purchase",
     payment: "",
     deposit: "",
   });
 
+  const [tableData, setTableData] = useState<string[]>([]);
+
+  function addItem(selectedItem: string) {
+    setTableData((prevData) => [...prevData, selectedItem]);
+  }
+
+  function removeItem(selectedItem: string) {
+    setTableData((prevData) =>
+      prevData.filter((item) => item !== selectedItem),
+    );
+  }
+
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     const { value, name } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    // todo fix date received & promised not updating
+    console.log(value, name);
+
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: name.endsWith("Price") ? Number(value) : value,
+      };
+
+      if (name.endsWith("Price")) {
+        updatedData.totalPrice =
+          updatedData.cashPrice +
+          updatedData.cardPrice +
+          updatedData.mailPrice +
+          updatedData.weeklyPrice +
+          updatedData.monthlyPrice +
+          updatedData.willCallPrice;
+      }
+      return updatedData;
+    });
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    setFormData((prevData) => ({
+      ...prevData,
+      purchaseDates: [...prevData.purchaseDates, getCurrentDate()],
+    }));
 
     console.log(formData);
   }
@@ -61,10 +135,26 @@ const Page = () => {
   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, checked } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: checked,
-    }));
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: checked,
+      };
+
+      if (checked) {
+        updatedData.totalPrice += Number(updatedData[name + "Price"]);
+      } else {
+        updatedData.totalPrice -= Number(updatedData[name + "Price"]);
+      }
+
+      return updatedData;
+    });
+
+    if (checked) {
+      addItem(name);
+    } else {
+      removeItem(name);
+    }
   }
 
   function handlePurchaseType(e: React.ChangeEvent<HTMLInputElement>) {
@@ -80,7 +170,9 @@ const Page = () => {
 
   return (
     // todo goal: make it look like physical receipt
-    <form
+    // todo add server action
+    <Form
+      action=""
       onSubmit={handleSubmit}
       className="small-receipt-form max-w-screen-sm mx-auto"
     >
@@ -137,22 +229,22 @@ const Page = () => {
 
       <div className="flex justify-between">
         <div>
-          <label htmlFor="received">Date Received</label>
+          <label htmlFor="dateReceived">Date Received</label>
           <input
             type="date"
-            name="received"
-            id="received"
+            name="dateReceived"
+            id="dateReceived"
             value={formData.dateReceived}
             onChange={handleChange}
           />
         </div>
 
         <div>
-          <label htmlFor="promised">Date Promised</label>
+          <label htmlFor="datePromised">Date Promised</label>
           <input
             type="datetime-local"
-            name="promised"
-            id="promised"
+            name="datePromised"
+            id="datePromised"
             value={formData.datePromised}
             onChange={handleChange}
           />
@@ -171,8 +263,19 @@ const Page = () => {
         ></textarea>
       </div>
 
+      <div>
+        <label htmlFor="total">Total</label>
+        <input
+          type="number"
+          name="total"
+          id="total"
+          value={formData.total}
+          onChange={handleChange}
+        />
+      </div>
+
       <div className="grid grid-cols-3">
-        {["cash", "card", "weekly", "monthly", "will-call", "mail"].map(
+        {["cash", "card", "weekly", "monthly", "willCall", "mail"].map(
           (name) => (
             <div key={name} className="small-receipt-form__checkbox-container">
               <input
@@ -189,7 +292,44 @@ const Page = () => {
         )}
       </div>
 
-      {/*todo add charges ._.*/}
+      <table className="small-receipt-form__table container">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Date</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tableData.map((data) => (
+            <tr key={data}>
+              <th scope="row">
+                {data.charAt(0).toUpperCase() + data.slice(1)}
+              </th>
+              <td></td>
+              <td>
+                <input
+                  type="number"
+                  name={`${data}Price`}
+                  id={`${data}Price`}
+                  value={Number(formData[data + "Price"])}
+                  onChange={handleChange}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Total</th>
+            <td className="text-center">{getCurrentDate()}</td>
+            <td>
+              {formData.total} - {formData.totalPrice} ={" "}
+              {formData.total - formData.totalPrice}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
 
       <fieldset className="border border-black">
         <legend>Taxes</legend>
@@ -272,7 +412,7 @@ const Page = () => {
       )}
 
       <button type="submit">Submit</button>
-    </form>
+    </Form>
   );
 };
 
