@@ -24,6 +24,7 @@ interface FormData {
   willCallPrice: number;
   mailPrice: number;
   totalPrice: number;
+  total: number;
   taxes: string;
   typeOfPurchase: string;
   payment: string;
@@ -72,6 +73,7 @@ const Page = () => {
     willCallPrice: 0,
     mailPrice: 0,
     totalPrice: 0,
+    total: 0,
     taxes: "0",
     typeOfPurchase: "purchase",
     payment: "",
@@ -251,6 +253,17 @@ const Page = () => {
         ></textarea>
       </div>
 
+      <div>
+        <label htmlFor="total">Total</label>
+        <input
+          type="number"
+          name="total"
+          id="total"
+          value={formData.total}
+          onChange={handleChange}
+        />
+      </div>
+
       <div className="grid grid-cols-3">
         {["cash", "card", "weekly", "monthly", "willCall", "mail"].map(
           (name) => (
@@ -297,7 +310,10 @@ const Page = () => {
         <tfoot>
           <tr>
             <th scope="row">Total</th>
-            <td>{formData.totalPrice}</td>
+            <td>
+              {formData.total} - {formData.totalPrice} ={" "}
+              {formData.total - formData.totalPrice}
+            </td>
           </tr>
         </tfoot>
       </table>
