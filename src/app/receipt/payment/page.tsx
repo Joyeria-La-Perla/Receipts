@@ -112,8 +112,6 @@ const Page = () => {
       }
       return updatedData;
     });
-
-    console.log(value, name);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -139,9 +137,6 @@ const Page = () => {
 
       return updatedData;
     });
-
-    // todo add the logic for table
-    console.log(name, checked);
 
     if (checked) {
       addItem(name);
@@ -274,9 +269,6 @@ const Page = () => {
         )}
       </div>
 
-      {/*todo add charges ._.*/}
-      {/*todo tr will display when checking a checkbox above*/}
-      {/*todo total will get the text input and add it together*/}
       <table className="small-receipt-form__table container">
         <thead>
           <tr>
