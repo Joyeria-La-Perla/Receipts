@@ -229,22 +229,22 @@ const Page = () => {
 
       <div className="flex justify-between">
         <div>
-          <label htmlFor="received">Date Received</label>
+          <label htmlFor="dateReceived">Date Received</label>
           <input
             type="date"
-            name="received"
-            id="received"
+            name="dateReceived"
+            id="dateReceived"
             value={formData.dateReceived}
             onChange={handleChange}
           />
         </div>
 
         <div>
-          <label htmlFor="promised">Date Promised</label>
+          <label htmlFor="datePromised">Date Promised</label>
           <input
             type="datetime-local"
-            name="promised"
-            id="promised"
+            name="datePromised"
+            id="datePromised"
             value={formData.datePromised}
             onChange={handleChange}
           />
