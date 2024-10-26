@@ -75,7 +75,7 @@ const Page = () => {
     mailPrice: 0,
     totalPrice: 0,
     total: 0,
-    purchaseDates: [""],
+    purchaseDates: [],
     taxes: "0",
     typeOfPurchase: "purchase",
     payment: "",
@@ -99,6 +99,9 @@ const Page = () => {
   ) {
     const { value, name } = e.target;
 
+    // todo fix date received & promised not updating
+    console.log(value, name);
+
     setFormData((prevData) => {
       const updatedData = {
         ...prevData,
@@ -120,6 +123,11 @@ const Page = () => {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    setFormData((prevData) => ({
+      ...prevData,
+      purchaseDates: [...prevData.purchaseDates, getCurrentDate()],
+    }));
 
     console.log(formData);
   }
