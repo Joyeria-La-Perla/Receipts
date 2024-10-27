@@ -24,12 +24,9 @@ interface FormData {
   willCallPrice: number;
   mailPrice: number;
   totalPrice: number;
-  total: number;
+  total: number | "";
   purchaseDates: string[];
   taxes: string;
-  typeOfPurchase: string;
-  payment: string;
-  deposit: string;
 
   [key: string]: string | number | boolean | string[];
 }
@@ -77,9 +74,6 @@ const Page = () => {
     total: 0,
     purchaseDates: [],
     taxes: "0",
-    typeOfPurchase: "purchase",
-    payment: "",
-    deposit: "",
   });
 
   const [tableData, setTableData] = useState<string[]>([]);
@@ -155,17 +149,6 @@ const Page = () => {
     } else {
       removeItem(name);
     }
-  }
-
-  function handlePurchaseType(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      typeOfPurchase: value,
-      payment: value === "purchase" ? prevData.payment : "",
-      deposit: value === "lay_away" ? prevData.deposit : "",
-    }));
   }
 
   return (
@@ -269,7 +252,7 @@ const Page = () => {
           type="number"
           name="total"
           id="total"
-          value={formData.total}
+          value={formData.total === 0 ? "" : formData.total}
           onChange={handleChange}
         />
       </div>
@@ -312,7 +295,11 @@ const Page = () => {
                   type="number"
                   name={`${data}Price`}
                   id={`${data}Price`}
-                  value={Number(formData[data + "Price"])}
+                  value={
+                    Number(formData[data + "Price"]) === 0
+                      ? ""
+                      : Number(formData[data + "Price"])
+                  }
                   onChange={handleChange}
                 />
               </td>
@@ -324,92 +311,13 @@ const Page = () => {
             <th scope="row">Total</th>
             <td className="text-center">{getCurrentDate()}</td>
             <td>
-              {formData.total} - {formData.totalPrice} ={" "}
-              {formData.total - formData.totalPrice}
+              {formData.total === "" ? 0 : formData.total} -{" "}
+              {formData.totalPrice} ={" "}
+              {Number(formData.total) - formData.totalPrice}
             </td>
           </tr>
         </tfoot>
       </table>
-
-      <fieldset className="border border-black">
-        <legend>Taxes</legend>
-        <div className="small-receipt-form__taxes-container">
-          <input
-            type="radio"
-            name="taxes"
-            id="default_tax"
-            value="0"
-            checked={formData.taxes === "0"}
-            onChange={handleChange}
-          />
-          <label htmlFor="default_tax">0%</label>
-        </div>
-
-        <div className="small-receipt-form__taxes-container">
-          <input
-            type="radio"
-            name="taxes"
-            id="local_tax"
-            value="8.9"
-            checked={formData.taxes === "8.9"}
-            onChange={handleChange}
-          />
-          <label htmlFor="local_tax">8.9%</label>
-        </div>
-      </fieldset>
-
-      <fieldset className="border border-black">
-        <legend>Type of purchase</legend>
-        <div className="small-receipt-form__purchase-container">
-          <input
-            type="radio"
-            name="typeOfPurchase"
-            id="purchase"
-            value="purchase"
-            checked={formData.typeOfPurchase === "purchase"}
-            onChange={handlePurchaseType}
-          />
-          <label htmlFor="purchase">Purchase</label>
-        </div>
-
-        <div className="small-receipt-form__purchase-container">
-          <input
-            type="radio"
-            name="typeOfPurchase"
-            id="lay_away"
-            value="lay_away"
-            checked={formData.typeOfPurchase === "lay_away"}
-            onChange={handlePurchaseType}
-          />
-          <label htmlFor="lay_away">Lay away</label>
-        </div>
-      </fieldset>
-
-      <hr />
-
-      {formData.typeOfPurchase === "purchase" ? (
-        <div>
-          <label htmlFor="payment">Payment</label>
-          <input
-            type="text"
-            name="payment"
-            id="payment"
-            value={formData.payment}
-            onChange={handleChange}
-          />
-        </div>
-      ) : (
-        <div>
-          <label htmlFor="deposit">Deposit</label>
-          <input
-            type="text"
-            name="deposit"
-            id="deposit"
-            value={formData.deposit}
-            onChange={handleChange}
-          />
-        </div>
-      )}
 
       <button type="submit">Submit</button>
     </Form>
