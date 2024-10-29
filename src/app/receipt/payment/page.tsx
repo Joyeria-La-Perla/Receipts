@@ -26,7 +26,6 @@ interface FormData {
   totalPrice: number;
   total: number | "";
   purchaseDates: string[];
-  taxes: string;
 
   [key: string]: string | number | boolean | string[];
 }
@@ -73,7 +72,6 @@ const Page = () => {
     totalPrice: 0,
     total: 0,
     purchaseDates: [],
-    taxes: "0",
   });
 
   const [tableData, setTableData] = useState<string[]>([]);
@@ -93,7 +91,6 @@ const Page = () => {
   ) {
     const { value, name } = e.target;
 
-    // todo fix date received & promised not updating
     console.log(value, name);
 
     setFormData((prevData) => {
@@ -152,7 +149,6 @@ const Page = () => {
   }
 
   return (
-    // todo goal: make it look like physical receipt
     // todo add server action
     <Form
       action=""
@@ -202,7 +198,7 @@ const Page = () => {
       <div>
         <label htmlFor="phone">Phone</label>
         <input
-          type="text"
+          type="tel"
           name="phone"
           id="phone"
           onChange={handleChange}
