@@ -2,36 +2,16 @@
 
 import React, { useState } from "react";
 import Form from "next/form";
+import { PaymentReceiptData } from "@/types/paymentReceipt";
+import { createPaymentAction } from "@/app/receipt/payment/actions";
 
-interface FormData {
-  name: string;
-  address: string;
-  city: string;
-  phone: string;
-  dateReceived: string;
-  datePromised: string;
-  remarks: string;
-  cash: boolean;
-  card: boolean;
-  weekly: boolean;
-  monthly: boolean;
-  willCall: boolean;
-  mail: boolean;
-  cashPrice: number;
-  cardPrice: number;
-  weeklyPrice: number;
-  monthlyPrice: number;
-  willCallPrice: number;
-  mailPrice: number;
-  totalPrice: number;
-  total: number | "";
-  purchaseDates: string[];
-
+export interface FormData extends PaymentReceiptData {
   [key: string]: string | number | boolean | string[];
 }
 
+const date = new Date();
+
 function getCurrentDate() {
-  const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
@@ -40,7 +20,6 @@ function getCurrentDate() {
 }
 
 function getFutureDate() {
-  const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
@@ -108,19 +87,29 @@ const Page = () => {
           updatedData.monthlyPrice +
           updatedData.willCallPrice;
       }
+
+      if (name === "total") {
+        updatedData.total = Number(value);
+      }
+
       return updatedData;
     });
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setFormData((prevData) => ({
-      ...prevData,
-      purchaseDates: [...prevData.purchaseDates, getCurrentDate()],
-    }));
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        purchaseDates: [...prevData.purchaseDates, date.toString()],
+      };
 
-    console.log(formData);
+      console.log(updatedData);
+      return updatedData;
+    });
+
+    await createPaymentAction(formData);
   }
 
   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
@@ -307,8 +296,7 @@ const Page = () => {
             <th scope="row">Total</th>
             <td className="text-center">{getCurrentDate()}</td>
             <td>
-              {formData.total === "" ? 0 : formData.total} -{" "}
-              {formData.totalPrice} ={" "}
+              {formData.total | 0} - {formData.totalPrice} ={" "}
               {Number(formData.total) - formData.totalPrice}
             </td>
           </tr>
