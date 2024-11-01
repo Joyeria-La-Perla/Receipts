@@ -99,12 +99,15 @@ const Page = () => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setFormData((prevData) => ({
-      ...prevData,
-      purchaseDates: [...prevData.purchaseDates, getCurrentDate()],
-    }));
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        purchaseDates: [...prevData.purchaseDates, getCurrentDate()],
+      };
 
-    console.log(formData);
+      console.log(updatedData);
+      return updatedData;
+    });
 
     await createPaymentAction(formData);
   }
