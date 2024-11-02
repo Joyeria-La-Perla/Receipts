@@ -96,17 +96,14 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setFormData((prevData) => {
-      const updatedData = {
-        ...prevData,
-        purchaseDates: [...prevData.purchaseDates, date.toString()],
-      };
+    const updatedData = {
+      ...formData,
+      purchaseDates: [...formData.purchaseDates, date.toString()],
+    };
 
-      console.log(updatedData);
-      return updatedData;
-    });
+    console.log(updatedData);
 
-    await createPaymentAction(formData);
+    await createPaymentAction(updatedData);
     resetFormData();
     redirect("/receipt/payment");
   }
@@ -284,6 +281,7 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
                 type="checkbox"
                 id={name}
                 name={name}
+                checked={Boolean(formData[name])}
                 onChange={handleCheckbox}
               />
               <label htmlFor={name}>
