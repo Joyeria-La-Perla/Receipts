@@ -6,6 +6,7 @@ div:has(> label, > input):not(.small-receipt-form__checkbox-container):not(
 }
 
 .small-receipt-form div input,
+.small-receipt-form__table input,
 fieldset,
 textarea {
   border: 1px solid black;

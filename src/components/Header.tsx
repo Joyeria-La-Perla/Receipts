@@ -3,8 +3,8 @@ import Link from "next/link";
 
 const Header = () => {
   const navigationItems = [
-    { page: "Sales", path: "/receipt/payment" },
-    { page: "Payment and Repair", path: "/receipt/sales-and-repair" },
+    { page: "Sales", path: "/receipt/sales-and-repair" },
+    { page: "Payment and Repair", path: "/receipt/payment" },
   ];
 
   return (
