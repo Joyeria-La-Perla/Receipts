@@ -29,3 +29,17 @@ export async function createPaymentReceipt(receipt: PaymentReceiptData) {
     },
   });
 }
+
+export async function getReceiptNumber() {
+  const result = await db.paymentReceipt.findMany({
+    orderBy: {
+      id: "desc",
+    },
+    take: 1,
+    select: {
+      id: true,
+    },
+  });
+
+  return result[0].id + 1;
+}
