@@ -5,6 +5,8 @@ import Form from "next/form";
 import { redirect } from "next/navigation";
 import { createPaymentAction } from "@/app/receipt/payment/actions";
 import { FormData } from "@/app/receipt/payment/page";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const date = new Date();
 
@@ -93,21 +95,6 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     });
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const updatedData = {
-      ...formData,
-      purchaseDates: [...formData.purchaseDates, date.toString()],
-    };
-
-    console.log(updatedData);
-
-    await createPaymentAction(updatedData);
-    resetFormData();
-    redirect("/receipt/payment");
-  }
-
   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, checked } = e.target;
 
@@ -131,6 +118,23 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     } else {
       removeItem(name);
     }
+  }
+
+  function handlePhone() {}
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const updatedData = {
+      ...formData,
+      purchaseDates: [...formData.purchaseDates, date.toString()],
+    };
+
+    console.log(updatedData);
+
+    await createPaymentAction(updatedData);
+    resetFormData();
+    redirect("/receipt/payment");
   }
 
   function resetFormData() {
@@ -213,14 +217,13 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
         />
       </div>
 
-      <div>
+      <div className="small-receipt-form__phone-container">
         <label htmlFor="phone">Phone</label>
-        <input
-          type="tel"
+        <PhoneInput
+          defaultCountry="US"
           name="phone"
-          id="phone"
           value={formData.phone}
-          onChange={handleChange}
+          onChange={handlePhone}
           autoComplete="off"
         />
       </div>
