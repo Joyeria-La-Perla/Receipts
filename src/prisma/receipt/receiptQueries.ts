@@ -41,5 +41,9 @@ export async function getReceiptNumber() {
     },
   });
 
+  if (result.length === 0) {
+    return 1;
+  }
+
   return result[0].id + 1;
 }
