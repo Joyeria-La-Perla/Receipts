@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { createPaymentAction } from "@/app/receipt/payment/actions";
 import { FormData } from "@/app/receipt/payment/page";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { type Value } from "react-phone-number-input";
 
 const date = new Date();
 
@@ -27,7 +27,6 @@ function getFutureDate() {
 }
 
 const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
-  // todo add checkbox tracker & reset it
   const [formData, setFormData] = useState<FormData>({
     name: "",
     address: "1608 W Sylvester St Unit C",
@@ -68,8 +67,6 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     const { value, name } = e.target;
-
-    console.log(value, name);
 
     setFormData((prevData) => {
       const updatedData = {
@@ -120,7 +117,12 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     }
   }
 
-  function handlePhone() {}
+  function handlePhone(value: Value) {
+    setFormData((prevData) => ({
+      ...prevData,
+      phone: value,
+    }));
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -129,8 +131,6 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
       ...formData,
       purchaseDates: [...formData.purchaseDates, date.toString()],
     };
-
-    console.log(updatedData);
 
     await createPaymentAction(updatedData);
     resetFormData();
@@ -228,7 +228,7 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
         />
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between">
         <div>
           <label htmlFor="dateReceived">Date Received</label>
           <input
