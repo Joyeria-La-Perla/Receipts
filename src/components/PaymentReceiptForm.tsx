@@ -167,7 +167,6 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
   }
 
   return (
-    // todo add server action
     <Form
       action=""
       onSubmit={handleSubmit}
@@ -222,6 +221,7 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
         <PhoneInput
           defaultCountry="US"
           name="phone"
+          id="phone"
           value={formData.phone}
           onChange={handlePhone}
           autoComplete="off"
