@@ -10,7 +10,7 @@ import PhoneInput, { type Value } from "react-phone-number-input";
 
 const date = new Date();
 
-function getCurrentDate() {
+function getDateReceived() {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
@@ -18,6 +18,14 @@ function getCurrentDate() {
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
   return `${year}-${month}-${day}T${hour}:${minutes}`;
+}
+
+function getCurrentDate() {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 function getFutureDate() {
@@ -34,7 +42,7 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     address: "1608 W Sylvester St Unit C",
     city: "Pasco",
     phone: "",
-    dateReceived: getCurrentDate(),
+    dateReceived: getDateReceived(),
     datePromised: getFutureDate(),
     remarks: "",
     cash: false,
@@ -132,6 +140,7 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     const updatedData = {
       ...formData,
       purchaseDates: [...formData.purchaseDates, date.toString()],
+      dateReceived: getDateReceived(),
     };
 
     await createPaymentAction(updatedData);
@@ -145,7 +154,7 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
       address: "1608 W Sylvester St Unit C",
       city: "Pasco",
       phone: "",
-      dateReceived: getCurrentDate(),
+      dateReceived: getDateReceived(),
       datePromised: getFutureDate(),
       remarks: "",
       cash: false,
