@@ -6,9 +6,19 @@ import { redirect } from "next/navigation";
 import { createPaymentAction } from "@/app/receipt/payment/actions";
 import { FormData } from "@/app/receipt/payment/page";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { type Value } from "react-phone-number-input";
 
 const date = new Date();
+
+function getDateReceived() {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hour}:${minutes}`;
+}
 
 function getCurrentDate() {
   const year = date.getFullYear();
@@ -27,13 +37,12 @@ function getFutureDate() {
 }
 
 const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
-  // todo add checkbox tracker & reset it
   const [formData, setFormData] = useState<FormData>({
     name: "",
     address: "1608 W Sylvester St Unit C",
     city: "Pasco",
     phone: "",
-    dateReceived: getCurrentDate(),
+    dateReceived: getDateReceived(),
     datePromised: getFutureDate(),
     remarks: "",
     cash: false,
@@ -68,8 +77,6 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     const { value, name } = e.target;
-
-    console.log(value, name);
 
     setFormData((prevData) => {
       const updatedData = {
@@ -120,7 +127,12 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     }
   }
 
-  function handlePhone() {}
+  function handlePhone(value: Value) {
+    setFormData((prevData) => ({
+      ...prevData,
+      phone: value,
+    }));
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -128,9 +140,8 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
     const updatedData = {
       ...formData,
       purchaseDates: [...formData.purchaseDates, date.toString()],
+      dateReceived: getDateReceived(),
     };
-
-    console.log(updatedData);
 
     await createPaymentAction(updatedData);
     resetFormData();
@@ -143,7 +154,7 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
       address: "1608 W Sylvester St Unit C",
       city: "Pasco",
       phone: "",
-      dateReceived: getCurrentDate(),
+      dateReceived: getDateReceived(),
       datePromised: getFutureDate(),
       remarks: "",
       cash: false,
@@ -228,11 +239,11 @@ const PaymentReceiptForm = ({ receiptId }: { receiptId: number }) => {
         />
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between">
         <div>
           <label htmlFor="dateReceived">Date Received</label>
           <input
-            type="date"
+            type="datetime-local"
             name="dateReceived"
             id="dateReceived"
             value={formData.dateReceived}
